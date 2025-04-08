@@ -1,0 +1,22 @@
+{
+    "url": "https://www.nottingham.edu.my/thelibrary/FindingResources/eResourcesGuides/Computer-Sciences-and-Engineering.aspx",
+    "content": [
+        {
+            "p": "BSI Standards is the UK's National Standards Body (NSB) that involves in the development of business information solutions for British organisations of all sizes and sectors. The IEEE Xplore digital library is a powerful resource for discovery and access to scientific and technical content published by IEEE (Institute of Electrical and Electronics Engineers) and its publishing partners. ScienceDirect is a large scientific, technical and medical (STM) database providing access to full-text journals from Elsevier Science and partner publishers. Please see our contact page for telephone and email contact points."
+        }
+    ],
+    "pdf_files": [
+        "pdf_files/American-Chemical-Society.pdf",
+        "pdf_files/ASCE-Online-Research-Library.pdf",
+        "pdf_files/ASME-Digital-Library.pdf",
+        "pdf_files/British-Standards-Online.pdf",
+        "pdf_files/Ei-Compendex.pdf",
+        "pdf_files/IEEE-Xplore.pdf",
+        "pdf_files/Scopus.pdf",
+        "pdf_files/SpringerLink.pdf",
+        "pdf_files/Web-of-Science.pdf",
+        "pdf_files/Wiley-Online-Library-Journals.pdf",
+        "pdf_files/Oxford-Journals.pdf",
+        "pdf_files/Science-Direct.pdf"
+    ]
+}

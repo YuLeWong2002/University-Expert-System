@@ -1,0 +1,9 @@
+{
+    "url": "https://www.nottingham.ac.uk/externalrelations/digital-and-marketing/web-team/contensis/common-errors.aspx",
+    "content": [
+        {
+            "p": "Server errors occur for a number of reasons. This page shows some of the more commonly reported errors and explains how to fix them. If you receive an error similar to the one below it means your URL is too long. You'll find that you won't be able to preview your page until it's been shortened. You can edit this in the Properties tab, and then editing the File Name field. File names should be written in lowercase and use hyphens between words, with no punctuation. They should be kept as short as possible, while retaining meaning because the file name will become part of your page URL. Sometimes when a page, image or document is previewed from within Contensis, you'll receive a generic contensis error similar to this: Keep refreshing your page. Your preview will show within a couple of minutes. This error commonly occurs when a new folder has been created and a web control is used to display items from that folder. For example, if you're using the folder images banner web control to display images from a brand new folder, you're likely to see this error when you preview your page. Navigation changes take time to update so please allow up to an hour for your folder to be recognised. If you have two or more of the same web controls on a page (for example, Generic List) you must ensure they each have a unique ID. It's not possible to have duplicate IDs on one page. Your error message will probably look something like this: To fix this error: If you spot an error message, please take a screenshot and upload it to our support request form explaining what you did before the error appeared (and where in Contensis the error occurred. We'll then fix the error (or tell you how to fix it)."
+        }
+    ],
+    "pdf_files": []
+}

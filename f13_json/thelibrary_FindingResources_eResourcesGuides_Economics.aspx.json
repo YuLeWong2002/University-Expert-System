@@ -1,0 +1,21 @@
+{
+    "url": "https://www.nottingham.edu.my/thelibrary/FindingResources/eResourcesGuides/Economics.aspx",
+    "content": [
+        {
+            "p": "ABI Inform Global provides articles and abstracts dealing with public and private companies, industry research, marketing and advertising, finance and human resources. Business Source Premier provides full text access to nearly 8,350 scholarly business journals and other sources. Emerald provides online resources in the form of comprehensive subject-specific reading lists in business, society, public policy and education. The online version of the World Tourism Factbook is a source that offers access to the most up-to-date statistics on inbound and outbound tourism for more than 200 countries and territories. Please see our contact page for telephone and email contact points."
+        }
+    ],
+    "pdf_files": [
+        "pdf_files/ProQuest.pdf",
+        "pdf_files/Business-Source-Premier.pdf",
+        "pdf_files/Cambridge-Journals-Online.pdf",
+        "pdf_files/EconLit.pdf",
+        "pdf_files/Emerald.pdf",
+        "pdf_files/OECD-iLibrary.pdf",
+        "pdf_files/Oxford-Journals.pdf",
+        "pdf_files/Statista.pdf",
+        "pdf_files/Taylor-and-Francis-Online.pdf",
+        "pdf_files/Wiley-Online-Library-Journals.pdf",
+        "pdf_files/Wall-Street-Journal.pdf"
+    ]
+}

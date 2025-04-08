@@ -1,0 +1,21 @@
+{
+    "url": "https://www.nottingham.edu.my/thelibrary/FindingResources/eResourcesGuides/Politics.aspx",
+    "content": [
+        {
+            "p": "Please see our contact page for telephone and email contact points."
+        }
+    ],
+    "pdf_files": [
+        "pdf_files/ProQuest.pdf",
+        "pdf_files/Cambridge-Journals-Online.pdf",
+        "pdf_files/Post-War-Europe.pdf",
+        "pdf_files/The-Times-Digital-Archive.pdf",
+        "pdf_files/Oxford-Journals.pdf",
+        "pdf_files/Taylor-and-Francis-Online.pdf",
+        "pdf_files/Wiley-Online-Library-Journals.pdf",
+        "pdf_files/JSTOR.pdf",
+        "pdf_files/Web-of-Science.pdf",
+        "pdf_files/SAGE-Journals-Online.pdf",
+        "pdf_files/HeinOnline.pdf"
+    ]
+}

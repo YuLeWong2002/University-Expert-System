@@ -1,0 +1,39 @@
+{
+    "url": "https://www.nottingham.edu.my/thelibrary/FindingResources/General-Guides.aspx",
+    "content": [
+        {
+            "p": "NUsearch video guides How to access: How to request: How to book: How to renew: How to: How to access eBooks: You can refer to the guide on how to access eBooks via NUsearch. [ Guide PDF ] When accessing eBooks in the library, you can use one of the University PCs, a loaned laptop or your own device. The NUsearch terminals in library are designed for catalogue search only. The Frequently Asked Questions page provides further information about accessing and using the eBook collection. Like physical books, library eBooks are protected by copyright law, and for many ebooks this is controlled automatically by Digital Rights Management (DRM) software. The amount you can download, copy or print varies from one publisher and title to another. This information is usually displayed when you use each eBook. Please see our contact page for telephone and email contact points."
+        }
+    ],
+    "pdf_files": [
+        "pdf_files/NUSearch-Guide.pdf",
+        "pdf_files/NRequest-central-store-item.pdf",
+        "pdf_files/How-to-request-an-Inter-Library-Loan.pdf",
+        "pdf_files/NReserving-loan-item.pdf",
+        "pdf_files/KLTC-NBook-Loan-Delivery.pdf",
+        "pdf_files/How-to-Book-a-Meeting-Room.pdf",
+        "pdf_files/How-to-book-PG-Study-Room.pdf",
+        "pdf_files/How-to-book-short-loan-restricted-bookable-item.pdf",
+        "pdf_files/How-to-book-the-facilities-inside-Multimedia-Room.pdf",
+        "pdf_files/PDF-guide-Book-an-individual-space-in-LearningThe-Core.pdf",
+        "pdf_files/NRenew-loan-items.pdf",
+        "pdf_files/How-To-Check-Fines.pdf",
+        "pdf_files/How-To-Pay-Fines-2017.pdf",
+        "pdf_files/How-to-pay-for-KLTC-BLD-Deposit.pdf",
+        "pdf_files/How-to-use-Browzine.pdf",
+        "pdf_files/Cambridge-Books-Online.pdf",
+        "pdf_files/Cambridge-Companions-Online.pdf",
+        "pdf_files/Ebook-Central-off-campus.pdf",
+        "pdf_files/Emerald.pdf",
+        "pdf_files/ICE-Virtual-Library.pdf",
+        "pdf_files/iG-Library.pdf",
+        "pdf_files/Knovel.pdf",
+        "pdf_files/Oxford-Reference.pdf",
+        "pdf_files/Oxford-Scholarship.pdf",
+        "pdf_files/Taylor-and-Francis-ebook-off-campus.pdf",
+        "pdf_files/VitalSource-Bridge-off-campus.pdf",
+        "pdf_files/VLeBooks-off-campus.pdf",
+        "pdf_files/Wiley-Online-Library.pdf",
+        "pdf_files/NUsearch-Malaysia-Guide-Finding-eBooks.pdf"
+    ]
+}

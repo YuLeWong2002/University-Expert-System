@@ -1,0 +1,19 @@
+{
+    "url": "https://www.nottingham.edu.my/thelibrary/FindingResources/eResourcesGuides/Education.aspx",
+    "content": [
+        {
+            "p": "ProQuest provides articles and abstracts dealing with social sciences and humanity. [ Guide PDF ] ScienceDirect is a large scientific, technical and medical (STM) database providing access to full-text journals from Elsevier Science and partner publishers. Please see our contact page for telephone and email contact points."
+        }
+    ],
+    "pdf_files": [
+        "pdf_files/JSTOR.pdf",
+        "pdf_files/SAGE-Journals-Online.pdf",
+        "pdf_files/Oxford-Journals.pdf",
+        "pdf_files/Taylor-and-Francis-Online.pdf",
+        "pdf_files/Wiley-Online-Library-Journals.pdf",
+        "pdf_files/ProQuest.pdf",
+        "pdf_files/SpringerLink.pdf",
+        "pdf_files/Web-of-Science.pdf",
+        "pdf_files/Science-Direct.pdf"
+    ]
+}

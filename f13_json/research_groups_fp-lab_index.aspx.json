@@ -1,0 +1,9 @@
+{
+    "url": "https://www.nottingham.ac.uk/research/groups/fp-lab/index.aspx",
+    "content": [
+        {
+            "p": "The Functional Programming Lab has been a leading centre for programming language research for many years. Our aim is to develop simple but powerful techniques for writing and reasoning about programs, by recognising and exploiting their underlying mathematical structure. Most of our work takes place within functional languages such as Haskell and Agda, which are at the forefront of programming language research, and provide ideal vehicles for research of this nature. The FP lab provides a highly active research environment that includes weekly seminars, regular international visitors, and an annual workshop. The group has been supported by more than thirty research grants from EPSRC, the Royal Society, the European Union, Microsoft, and the US Air Force, and has produced more than 30 PhD graduates. Members have also played a leading role in the international community, serving as vice-chair of ACM SIGPLAN, editorial board member of Fundamenta Informaticae and the Journal of Functional Programming, chair of the ICFP, TLCA, MPC, and FARM conferences, and have published textbooks on Haskell and Python. The group is a founder member of the Midlands Graduate School in the Foundations of Computing Science. We are always keen to have research visitors - please get in touch if you would like to visit the FP lab or give a talk at our weekly meetings! The University of Nottingham School of Computer Science Jubilee Campus Nottingham, NG7 1BB telephone: +44 (0) 115 95 14220 email:fp-lunch@cs.nott.ac.uk"
+        }
+    ],
+    "pdf_files": []
+}

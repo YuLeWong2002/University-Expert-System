@@ -1,0 +1,22 @@
+{
+    "url": "https://www.nottingham.edu.my/thelibrary/FindingResources/eResourcesGuides/Business.aspx",
+    "content": [
+        {
+            "p": "ABI Inform Global provides articles and abstracts dealing with public and private companies, industry research, marketing and advertising, finance and human resources. Business Source Premier provides full text access to nearly 8,350 scholarly business journals and other sources. Emerald provides online resources in the form of comprehensive subject-specific reading lists in business, society, public policy and education. MarketLine Advantage is a premium business information resource provides in-depth UK, Global market research and specialising in industry analysis. Mintel Reports provides European, UK-specific, US consumer markets research and related trade new abstracts. Available report categories are Market Intelligence Essentials, Food and Drink, Country Reports and Travel and Tourism Analyst. Please see our contact page for telephone and email contact points."
+        }
+    ],
+    "pdf_files": [
+        "pdf_files/ProQuest.pdf",
+        "pdf_files/Business-Source-Premier.pdf",
+        "pdf_files/Emerald.pdf",
+        "pdf_files/JSTOR.pdf",
+        "pdf_files/MarketLineAdvantage.pdf",
+        "pdf_files/Mintel-Reports.pdf",
+        "pdf_files/Oxford-Journals.pdf",
+        "pdf_files/SpringerLink.pdf",
+        "pdf_files/Statista.pdf",
+        "pdf_files/Taylor-and-Francis-Online.pdf",
+        "pdf_files/Wall-Street-Journal.pdf",
+        "pdf_files/Wiley-Online-Library-Journals.pdf"
+    ]
+}
