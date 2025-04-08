@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Page Not Found: Science Publishing Group</title>
+<head>
+    <title></title>
+    
+      
+      <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="/css/font.min.css?v=20241030093029">
+      <link rel="stylesheet" type="text/css" href="/css/common.min.css?v=20241030093029">
+      <link rel="stylesheet" type="text/css" href="/css/selectJournalForm.min.css?v=20241030093029">
+      <link rel="stylesheet" href="/css/all.min.css?v=20241030093029">
+      <link rel="stylesheet" href="/css/problem_feedback.min.css?v=20241030093029">
+      <script src="/js/jquery-1.11.3.min.js?v=20241030093029"></script>
+      <script src="/js/clipboard/clipboard.min.js?v=20241030093029"></script>
+      <script src="/js/common.min.js?v=20241030093029"></script>
+      <script src="/js/ResizeSensor.js?v=20241030093029"></script>
+      <script src="/js/sticky-sidebar.js?v=20241030093029"></script>
+      <script src="/js/customsize-validate.min.js?v=20241030093029"></script>
+
+      <script src="/ajax/libs/layer/layer.min.js?v=20241030093029"></script>
+      <script src="/ajax/libs/layer/lang/en.min.js?v=20241030093029"></script>
+    
+      <link rel="stylesheet" type="text/css" href="/css/swiper.min.css?v=20241030093029">
+      <script type="text/javascript" src="/js/mt-tabpage.js?v=20241030093029"></script>
+    
+
+  </head>
+<link rel="stylesheet" type="text/css" href="/home/css/page_not_found.min.css?v=20241030093029">
+<script src="/home/js/error.min.js?v=20241030093029"></script>
+</head>
+
+<body>
+
+	<input type="hidden" id="responseStatus" value="200">
+	<input type="hidden" id="errorStatus" value="">
+	
+
+	<div id="all-content" style="display: none;">
+	<!-- th:block th:insert="/layouts/decorator_spg :: header('')"></th:block -->
+
+		<div class="platform_header">
+			<div class="platform_item content clearfix">
+				<div class="platform_logo left">
+					<a href="http://www.sciencepg.com"><img src="/img/logo.png"></a>
+				</div>
+
+				<div class="platform_login_item right">
+					<div class="login_register">
+						<a href="https://sso.sciencepg.com/login" class="platform_login" target="_blank">
+							<i class="fas fa-user-circle"></i>Log in
+						</a>
+						<a href="https://sso.sciencepg.com/register" target="_blank">
+							Register
+						</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="platform_nav_item">
+			<div class="content">
+				<ul class="clearfix platform_ul">
+					<li class="navmenu platform_nav_active">
+						<a href="http://www.sciencepg.com" class="nav_a">Home</a>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/journals/browse-by-subject" class="nav_a">Journals<i class="fas fa-angle-down"></i></a>
+						<div class="sub_menu_wrap clearfix">
+							<div class="sub_menu sub_menu_journal_subject left">
+								<p class="sub_menu_p">Journals By Subject</p>
+
+								<div class="col-sm-1 left">
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/11" target="_blank">
+											<i class="fas fa-dna"></i>
+											Biology &amp; Life Sciences
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/15" target="_blank">
+											<i class="fas fa-capsules"></i>
+											Medicine, Health &amp; Food
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/51" target="_blank">
+											<i class="fas fa-gem"></i>
+											Materials Science
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/16" target="_blank">
+											<i class="fas fa-globe-americas"></i>
+											Earth, Energy &amp; Environment
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/18" target="_blank">
+											<i class="fas fa-pencil-ruler"></i>
+											Engineering &amp; Technology
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/17" target="_blank">
+											<i class="fas fa-coins"></i>
+											Economics &amp; Management
+										</a>
+									</div>
+
+
+
+
+								</div>
+								<div class="col-sm-2 left">
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/70" target="_blank">
+											<i class="fas fa-flask"></i>
+											Chemistry
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/12" target="_blank">
+											<i class="fas fa-atom"></i>
+											Mathematics &amp; Physics
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/23" target="_blank">
+											<i class="fas fa-desktop-alt"></i>
+											Electrical &amp; Computer Science
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/60" target="_blank">
+											<i class="fas fa-digging"></i>
+											Civil Engineering
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/19" target="_blank">
+											<i class="fas fa-graduation-cap"></i>
+											Education
+										</a>
+									</div>
+
+
+
+
+
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/journals/browse-by-subject/20" target="_blank">
+											<i class="fas fa-male"></i>
+											Humanities &amp; Social Sciences
+										</a>
+									</div>
+
+
+								</div>
+
+								<div class="clearfix"></div>
+								<a href="http://www.sciencepg.com/journals/browse-by-subject" class="platform_button" target="_blank">View All Journals</a>
+							</div>
+							<div class="sub_menu_curated left">
+								<p class="sub_menu_p">Special Issue</p>
+								<div class="menu_subject">
+									<a href="http://www.sciencepg.com/special-issues/guidelines" target="_blank"><i class="fas fa-compass"></i>Special Issue Guidelines</a>
+								</div>
+								<div class="menu_subject">
+									<a href="http://www.sciencepg.com/special-issues/propose" target="_blank"><i class="fas fa-file-edit"></i>Propose a Special Issue</a>
+								</div>
+								<div class="menu_subject">
+									<a href="http://www.sciencepg.com/special-issues/ongoing" target="_blank"><i class="fas fa-file-alt"></i>Ongoing Special Issues</a>
+								</div>
+								<div class="menu_subject">
+									<a href="http://www.sciencepg.com/special-issues/published" target="_blank"><i class="fas fa-file-alt"></i>Published Special Issues</a>
+								</div>
+							</div>
+							<div class="sub_menu_curated left">
+								<p class="sub_menu_p">Conference Publication</p>
+								<div class="menu_subject">
+									<a href="http://www.sciencepg.com/conference-special-issue" target="_blank"><i class="fas fa-users"></i>Conference Special Issue</a>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/proceedings" class="nav_a">Proceedings</a>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/books" class="nav_a">Books<i class="fas fa-angle-down"></i></a>
+						<div class="sub_menu_wrap book_wrap clearfix" style="display: none;">
+							<div class="sub_menu left">
+								<div class="col-sm-1 left">
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/books"><i class="fas fa-book"></i>Books List</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/conference-abstract-books"><i class="fas fa-book-open"></i>Conference Abstract Books</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/events" class="nav_a">Events</a>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/join-the-editorial-board" class="nav_a">Join<i class="fas fa-angle-down"></i></a>
+						<div class="sub_menu_wrap join_wrap clearfix" style="display: none;">
+							<div class="sub_menu left">
+								<div class="col-sm-1 left">
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/join-the-editorial-board"><i class="fas fa-user-friends"></i>Join the Editorial Board</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/become-a-reviewer"><i class="fas fa-user-tie"></i>Become a Reviewer</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/information/for-authors" class="nav_a">Information<i class="fas fa-angle-down"></i></a>
+						<div class="sub_menu_wrap information_wrap clearfix">
+							<div class="sub_menu left">
+
+								<div class="col-sm-1 left">
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/for-authors"><i class="fas fa-user-edit"></i>For Authors</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/for-reviewers"><i class="fas fa-user-tie"></i>For Reviewers</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/for-editors"><i class="fas fa-user-friends"></i>For Editors</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/for-conference-organizers"><i class="fas fa-user-friends"></i>For Conference Organizers</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/for-librarians"><i class="fas fa-building"></i>For Librarians</a>
+									</div>
+								</div>
+								<div class="col-sm-2 left">
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/special-issues/guidelines"><i class="fas fa-compass"></i>Special Issue Guidelines</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/editorial-process"><i class="fas fa-file-alt"></i>Editorial Process</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/manuscript-transfers"><i class="fas fa-random"></i>Manuscript Transfers</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/peer-reviewer"><i class="fas fa-file-edit"></i>Peer Review at SciencePG</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/open-access"><i class="fas fa-unlock"></i>Open Access</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/copyright-and-license"><i class="fas fa-copyright"></i>Copyright and License</a>
+									</div>
+									<div class="menu_subject">
+										<a href="http://www.sciencepg.com/information/ethical-guidelines"><i class="fas fa-pen-square"></i>Ethical Guidelines</a>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</li>
+					<li class="navmenu ">
+						<a href="http://www.sciencepg.com/contact" class="nav_a">Contact</a>
+					</li>
+					<li class="submit_navmenu">
+						<a href="http://www.sciencepg.com/submission" class="nav_a" target="_blank">Submit an Article</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	<div class="page_nav_track" id="Back_to_top">
+		<div class="content">
+			<nav>
+				<ul>
+					<li>
+						<a href="http://www.sciencepg.com/" class="tohead">Home</a>
+					</li>
+					<li>
+						<span><i class="fas fa-chevron-right"></i></span>
+						<span class="tohead">Page Not Found</span>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<div class="color_bg_blue" style="padding-top: 0px;">
+		<div class="content">
+			<div class="page_title">Page Not Found</div>
+			<p class="normal_p">Sorry, the page you are looking for is temporarily unavailable, please try again later. You can also reach out to us via email for support regarding the following services. Please feel free to contact us for any inquiries or assistance you may require.</p>
+			<div class="jump_link">
+				<p class="">Jump to Section</p>
+				<ul class="jump_ul clearfix">
+					<li class="left"><a href="#Submit_an_Article">Submit an Article</a></li>
+					<li class="left"><a href="#Join_the_Editorial_Team">Join the Editorial Team</a></li>
+					<li class="left"><a href="#Propose_a_Special_Issue">Propose a Special Issue</a></li>
+					<li class="left"><a href="#Organize_an_Event">Organize an Event</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+		<div class="color_bg_blue" id="Submit_an_Article">
+			<div class="content">
+				<div class="second_title">
+					Manuscript Submission
+				</div>
+				<p class="normal_p">If you are interested in submitting an article, you can submit your manuscript directly via email to <a href="mailto:submission@sciencepg.com" class="normal_link"><i class="fas fa-envelope"></i> submission@sciencepg.com</a></p>
+				<div class="intro_normal">
+					<div class="blokc_p">Download Template</div>
+					<p class="normal_p">We suggest using the Microsoft Word or LaTeX templates for preparing your manuscript to speed up the review process, though this is not obligatory. If not using a specific template, please ensure your heading levels are clear and the sections are distinctly defined.</p>
+					<div class="clearfix">
+						<div class="template left">
+							<p class="classify">Word and PDF</p>
+							<div class="view_more"><a href="https://download.sciencepg.com/SciencePG_Manuscript_Template.docx" target="_blank">Download Template (Word) <i class="fas fa-arrow-alt-circle-down"></i></a></div>
+							<div class="view_more"><a href="https://download.sciencepg.com/SciencePG_Manuscript_Template.pdf" target="_blank">Download Template (PDF) <i class="fas fa-arrow-alt-circle-down"></i></a></div>
+						</div>
+						<div class="template left double_box">
+							<p class="classify">LaTeX</p>
+							<div class="view_more"><a href="https://download.sciencepg.com/SciencePG_LaTeX_Template.rar" target="_blank">Download Template (LaTeX) <i class="fas fa-arrow-alt-circle-down"></i></a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="color_bg_blue" id="Join_the_Editorial_Team">
+			<div class="content">
+				<div class="second_title">
+					Join as Editorial Board Members or Reviewers
+					<div class="back_to_top"><a href="#Back_to_top"><span class="top_icon"><i class="fas fa-arrow-up"></i></span><span class="back_font">Back to top</span></a></div>
+				</div>
+				<p class="normal_p">At Science Publishing Group (SciencePG), we always appreciate and welcome professionals who are interested in becoming part of our dedicated editorial board and reviewer team.</p>
+				<p class="normal_p">If you are interested, you can submit your CV directly via email to <a href="mailto:membership@sciencepg.com" class="normal_link"><i class="fas fa-envelope"></i> membership@sciencepg.com</a></p>
+				<div class="intro_normal">
+					<div class="blokc_p">Download CV Template</div>
+					<p class="normal_p">If you don't have an English CV, you can download the provided CV template for reference.</p>
+					<div class="clearfix">
+						<div class="view_more"><a href="https://download.sciencepg.com/CV.docx" target="_blank">Download CV Template <i class="fas fa-arrow-alt-circle-down"></i></a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="color_bg_blue" id="Propose_a_Special_Issue">
+			<div class="content">
+				<div class="second_title">
+					Propose a Special Issue
+					<div class="back_to_top"><a href="#Back_to_top"><span class="top_icon"><i class="fas fa-arrow-up"></i></span><span class="back_font">Back to top</span></a></div>
+				</div>
+				<p class="normal_p">SciencePG welcomes all proposals corresponding to the aims and scope of this journal. The objectives of the special issues are to bring together recent high-quality research, promote key advances in theory and applications, and provide overviews of emerging domains.</p>
+				<p class="normal_p">Note: You can serve as the lead guest editor only after your Proposal Form has been approved.</p>
+				<p class="normal_p">If you are ready to propose a special issue, please download the special issue proposal form and complete the required information. you can submit the completed proposal form directly via email to <a href="mailto:specialissue@sciencepg.com" class="normal_link"><i class="fas fa-envelope"></i> specialissue@sciencepg.com</a></p>
+				<div class="view_more"><a href="https://download.sciencepg.com/SciencePG_Special_Issue_Proposal_Form.docx" target="_blank">Download Proposal Form <i class="fas fa-arrow-alt-circle-down"></i></a></div>
+			</div>
+		</div>
+		<div class="color_bg_blue" id="Organize_an_Event">
+			<div class="content">
+				<div class="second_title">
+					Organize an Event
+					<div class="back_to_top"><a href="#Back_to_top"><span class="top_icon"><i class="fas fa-arrow-up"></i></span><span class="back_font">Back to top</span></a></div>
+				</div>
+				<p class="normal_p"><a href="https://www.academicevents.org" target="_blank" class="normal_link">AcademicEvents (https://www.academicevents.org)<i class="fas fa-external-link-alt"></i></a> is a platform to promote academic events initiated by SciencePG. AcademicEvents aims to provide a conducive environment for academic exchange, promote discussion of hot topics, and encourage more cooperation and exchange among participants.</p>
+				<div class="event_type">
+					<div class="type_title">
+						<span>Events</span>
+					</div>
+					<div class="events_line"><img src="/img/event_type.png"></div>
+					<div class="events_ul clearfix">
+						<li>
+							<div class="type_img">
+								<img src="/img/type1.jpg">
+							</div>
+							<div class="type_operate">
+								<p class="type_name">Conferences</p>
+								<a href="https://www.academicevents.org/organize-an-event" target="_blank" class="type_link">Organize a Conference<img src="/img/arrow.png"></a>
+							</div>
+						</li>
+						<li>
+							<div class="type_img">
+								<img src="/img/type2.jpg">
+							</div>
+							<div class="type_operate">
+								<p class="type_name">Webinars</p>
+								<a href="https://www.academicevents.org/organize-an-event" target="_blank" class="type_link">Organize a Webinar<img src="/img/arrow.png"></a>
+							</div>
+						</li>
+						<li class="double_box">
+							<div class="type_img">
+								<img src="/img/type3.jpg">
+							</div>
+							<div class="type_operate">
+								<p class="type_name">Workshops</p>
+								<a href="https://www.academicevents.org/organize-an-event" target="_blank" class="type_link">Organize a Workshop<img src="/img/arrow.png"></a>
+							</div>
+						</li>
+					</div>
+				</div>
+				<p class="normal_p">The first step to launch an event on AcademicEvents is to submit an event proposal. To do this, simply download the proposal form and fill in the details of the event as requested. Once you have emailed us your proposal, our staff will review your conference details and contact you as soon as possible.</p>
+				<p class="normal_p">If you are interested in organizing a conference, please download the proposal form and submit via email to <a href="mailto:service@academicevents.org" class="normal_link"><i class="fas fa-envelope"></i> service@academicevents.org</a></p>
+				<div class="view_more"><a onclick="eventsDownload('https://www.academicevents.org/download/Event_Proposal_Form.doc')">Download Proposal Form <i class="fas fa-arrow-alt-circle-down"></i></a></div>
+			</div>
+		</div>
+		<div class="color_bg_blue">
+			<div class="content">
+				<div class="second_title">
+					About SciencePG
+					<div class="back_to_top"><a href="#Back_to_top"><span class="top_icon"><i class="fas fa-arrow-up"></i></span><span class="back_font">Back to top</span></a></div>
+				</div>
+				<p class="normal_p">SciencePG was founded in 2012 in New York, United States, with the primary objective of promoting open scientific exchange across all disciplines.</p>
+				<p class="normal_p">SciencePG is a publisher of scholarly open access journals, upholding a peer-reviewed, rapid, and rigorous manuscript handling and editorial process.</p>
+				<p class="normal_p">As one of the advocates of open access, we strongly believe in the power of knowledge dissemination. We provide comprehensive resources and guidance to facilitate a smooth and successful publication journey. From manuscript submission to post-acceptance processes, our dedicated team is here to guide you at every stage.</p>
+				<p class="normal_p">By choosing SciencePG, your research gains broader visibility and impact, reaching a global audience of scholars and professionals.</p>
+				<div class="date_number">
+					<div class="dataDown content">
+						<ul class="clearfix">
+							<li class="number_li number_li_1">
+								<p class="index_number" id="myTargetElement2">300</p>
+								<span>+</span>
+								<div class="number_div">
+									<p class="number_line blue_line"></p>
+								</div>
+								<p class="number_mean">Open Access Journals</p>
+							</li>
+							<li class="number_li number_li_2">
+								<p class="index_number" id="myTargetElement4">20,000</p>
+								<span>+</span>
+								<div class="number_div">
+									<p class="number_line red_line"></p>
+								</div>
+								<p class="number_mean">Editorial Board Members and Reviewers</p>
+							</li>
+							<li class="number_li number_li_3">
+								<p class="index_number" id="myTargetElement6">11,000</p>
+								<span>+</span>
+								<div class="number_div">
+									<p class="number_line blue_line"></p>
+								</div>
+								<p class="number_mean">Served Universities and Institutions</p>
+							</li>
+							<li class="number_li number_li_4">
+								<p class="index_number" id="myTargetElement5">600,000</p>
+								<span>+</span>
+								<div class="number_div">
+									<p class="number_line red_line"></p>
+								</div>
+								<p class="number_mean">Registered Scholars</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="color_bg_blue">
+			<div class="content">
+				<div class="second_title">
+					Contact Us
+					<div class="back_to_top"><a href="#Back_to_top"><span class="top_icon"><i class="fas fa-arrow-up"></i></span><span class="back_font">Back to top</span></a></div>
+				</div>
+				<p class="normal_p">For further assistance, you can also reach out to our Editorial Team:</p>
+				<div class="error_contact_info">
+					<ul class="clearfix">
+						<li>
+							<p class="type">Submission:</p>
+							<p class="email"><a href="mailto:submission@sciencepg.com" class="normal_link">submission@sciencepg.com</a></p>
+						</li>
+						<li>
+							<p class="type">AcademicEvents:</p>
+							<p class="email"><a href="mailto:service@academicevents.org" class="normal_link">service@academicevents.org</a></p>
+						</li>
+						<li class="double_box">
+							<p class="type">Service:</p>
+							<p class="email"><a href="mailto:service@sciencepublishinggroup.com" class="normal_link">service@sciencepublishinggroup.com</a></p>
+						</li>
+					</ul>
+					<ul class="clearfix">
+						<li>
+							<p class="type">Editorial Board:</p>
+							<p class="email"><a href="mailto:membership@sciencepg.com" class="normal_link">membership@sciencepg.com</a></p>
+						</li>
+						<li>
+							<p class="type">Special Issue:</p>
+							<p class="email"><a href="mailto:specialissue@sciencepg.com" class="normal_link">specialissue@sciencepg.com</a></p>
+						</li>
+						<li class="double_box">
+							<p class="type">Journal:</p>
+							<p class="email"><a href="mailto:journal@sciencepublishinggroup.com" class="normal_link">journal@sciencepublishinggroup.com</a></p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--th:block th:insert="/layouts/decorator :: footer"></th:block-->
+		<div class="footer">
+			<div class="content clearfix">
+				<div class="foot_item" style="width:458px;">
+					<p class="foot_p"><a href="http://www.sciencepg.com/about-sciencepg" target="_blank">About Us</a></p>
+					<p class="foot_about"><a href="http://www.sciencepg.com/about-sciencepg" target="_blank">Science Publishing Group (SciencePG) is an Open Access publisher, with more than 300 online, peer-reviewed journals covering a wide range of academic disciplines.</a></p>
+					<p class="foot_more_link"><a href="http://www.sciencepg.com/about-sciencepg" target="_blank" class="foot_about_more">Learn More About SciencePG <i class="fas fa-angle-right"></i></a></p>
+					<div class="foot_logo">
+						<a href="http://www.sciencepg.com/" target="_blank"><img src="/img/foot_logo.png"></a>
+					</div>
+				</div>
+				<div class="foot_item">
+					<p class="foot_p">Products</p>
+					<div class="foot_link">
+						<ul>
+							<li>
+								<a href="http://www.sciencepg.com/journals/browse-by-subject" target="_blank">Journals</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/special-issues/ongoing" target="_blank">Special Issues</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/proceedings" target="_blank">Proceedings</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/books" target="_blank">Books</a>
+							</li>
+							<li>
+								<a href="https://www.academicevents.org" target="_blank">AcademicEvents</a>
+							</li>
+							<li>
+								<a href="https://scholarprofiles.com/" target="_blank">ScholarProfiles</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="foot_item" style="margin-right: 40px;">
+					<p class="foot_p">Information</p>
+					<div class="foot_link">
+						<ul>
+							<li>
+								<a href="http://www.sciencepg.com/information/for-authors" target="_blank">For Authors</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/for-reviewers" target="_blank">For Reviewers</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/for-editors" target="_blank">For Editors</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/for-conference-organizers" target="_blank">For Conference Organizers</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/for-librarians" target="_blank">For Librarians</a>
+							</li>
+
+						</ul>
+					</div>
+				</div>
+				<div class="foot_item" style="margin-top:34px;">
+					<div class="foot_link">
+						<ul>
+							<li>
+								<a href="http://www.sciencepg.com/special-issues/guidelines" target="_blank">Special Issues Guidelines</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/editorial-process" target="_blank">Editorial Process</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/peer-reviewer" target="_blank">Peer Review at SciencePG</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/open-access" target="_blank">Open Access</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/information/ethical-guidelines" target="_blank">Ethical Guidelines</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="foot_item double_box">
+					<p class="foot_p">Important Link</p>
+					<div class="foot_link">
+						<ul>
+							<li>
+								<a href="http://www.sciencepg.com/submission" target="_blank">Manuscript Submission</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/special-issues/propose" target="_blank">Propose a Special Issue</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/join-the-editorial-board" target="_blank">Join the Editorial Board</a>
+							</li>
+							<li>
+								<a href="http://www.sciencepg.com/become-a-reviewer" target="_blank">Become a Reviewer</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="copyright">Copyright © 2012 -- 2024 Science Publishing Group – All rights reserved.</div>
+
+	</div>
+</body>
+</html>

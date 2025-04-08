@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Acta Physica Polonica B</title>
+<meta name="description" content="APP-B website">
+<meta name="keywords" content="acta physica polonica B">
+<link href="https://www.actaphys.uj.edu.pl/image/icon.png" rel="icon" type="image/ico">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="icon.png">
+<link rel="apple-touch-icon" sizes="114x114" href="icon.png">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="appb.css">
+</head>
+<body>
+<div class="container container-appb">
+<div class="row">
+<div id="appb-header" class="col-12 col-s-12">
+<a href="https://www.actaphys.uj.edu.pl/index.html" title="Acta Physica Polonica B" aria-label="Acta Physica Polonica B" rel="noreferrer"><img src="https://www.actaphys.uj.edu.pl/image/APPB.png" alt="APPB logo"></a>
+<span id="emblems">
+<a href="https://www.uj.edu.pl/" target="_blank" title="Jagiellonian University" id="emblem-UJ" aria-label="Jagiellonian University" rel="noreferrer"><img src="https://www.actaphys.uj.edu.pl/image/emblem_uj.png" alt="UJ emblem"></a>
+<a href="https://pau.krakow.pl/" target="_blank" title="Polish Academy of Arts and Sciences" id="emblem-PAU" aria-label="Polish Academu of Arts and Sciences" rel="noreferrer"><img src="https://www.actaphys.uj.edu.pl/image/emblem_pau.png" alt="PAU emblem"></a>
+<a href="https://www.eps.org/page/publi_rec_journals" target="_blank" title="Recognized by the European Physical Society" id="emblem-EPS" aria-label="European Physical Society" rel="noreferrer"><img src="https://www.actaphys.uj.edu.pl/image/emblem_eps.png" alt="EPS emblem"></a>
+<a href="image/seal_041219.bmp"><img src="https://www.actaphys.uj.edu.pl/image/emblem_seal_t5.png" alt="100th anniversary of APPB seal" id="emblem-SEAL" t1tle="100th Anniversary of APPB (2020)" style="float:right;"></a>
+</span>
+</div>
+</div>
+<div class="row">
+<div class="col-3 col-s-3 menu">
+<h3><a href="https://www.actaphys.uj.edu.pl/index.html" aria-label="home page" rel="nofollow">home</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/board.html" aria-label="editorial board" rel="nofollow">editorial board</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/authors.html" aria-label="guide for authors" rel="nofollow">for authors</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/for_referees.html" aria-label="guide for referees" rel="nofollow">for referees</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/subscriptions.html" aria-label="subscriptions" rel="nofollow">subscriptions</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/R" aria-label="main series" rel="nofollow" id="issue-R">main series</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/S" aria-label="proceedings supplement" rel="nofollow" id="issue-S">proceedings supplement</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/APP.html" aria-label="archival series" rel="nofollow" id="issue-A">articles 1920 &ndash; 1969</a></h3>
+<h3><a href="https://www.actaphys.uj.edu.pl/search.html" aria-label="search" rel="nofollow">search</a></h3>
+</div>
+<div class="col-9 col-s-9 tabContent">
+<h3>Acta Physica Polonica&nbsp;B&nbsp;<a href="https://en.wikipedia.org/wiki/Open_access" target="_blank" aria-label="open access" rel="noreferrer"><img src="https://www.actaphys.uj.edu.pl/image/open_access.png" alt="open access image" id="open-access"></a></h3>
+<hr>
+
+
+
+<p>Acta Physica Polonica B is an abstracted, refereed journal published by the <a href="https://www.uj.edu.pl/" target="_blank" aria-label="Jagiellonian University" rel="noreferrer">Jagiellonian University</a>, Krak&oacute;w, Poland, in cooperation with the <a href="https://pau.krakow.pl/" target="_blank" rel="noreferrer">Polish Academy of Arts and Sciences</a>.</p>
+<p>Since 1999 all current and past articles are freely available on an Open Access basis and under the conditions<br>of Creative Common License, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" aria-label="Licence CC-BY" rel="noreferrer">CC-BY 4.0</a>. Starting from January 1, 2014 we are partially funded by <a href="https://scoap3.org/" target="_blank" aria-label="SCOAP3" rel="noreferrer">SCOAP<sup>3</sup></a>.</p>
+<p>To prevent plagiarism we use the <a href="https://www.crossref.org/services/similarity-check/" target="_blank" aria-label="Crossref - Similarity Check" rel="noreferrer">Crossref Similarity Check</a> service.</p>
+<p>Acta Physica Polonica B covers the following areas of physics:</p>
+<ul>
+<li>General and Mathematical Physics</li>
+<li>Particle Physics and Field Theory</li>
+<li>Nuclear Physics</li>
+<li>Theory of Relativity and Astrophysics</li>
+<li>Statistical Physics</li>
+</ul>
+<p>No fee is charged from authors.</p>
+
+<hr>
+<div id="news-full-list">
+<h3>News</h3>
+<hr>
+<p><strong>May 2023 &bull; old papers of APP</strong></p>
+<p>We have <a href="https://www.actaphys.uj.edu.pl/APP.html" class="color-A">collected</a> all issues of <strong>Acta Physica Polonica</strong> published since 1920 until 1969.
+We hope that the availability of these archival volumes will be of interest to our readers and researchers of the history of physics.</p>
+
+<p><strong>March 2022 &bull; announcement concerning Russian invasion on Ukraine</strong></p>
+<p>In protest against the invasion of Russia (with the support of Belarus) on an independent 
+and sovereign territory and the people of Ukraine,
+on March 1, 2022 Poland suspended scientific collaboration 
+with the Russian Federation. Following the decision
+of the Rector of the Jagiellonian University, which suspends cooperation with Russian 
+universities and research centers, Acta Physica Polonica B stops publishing articles 
+by authors with affiliation to institutions from the Russian Federation and also from
+the Republic of Belarus.</p>
+
+<hr>
+<p>former <a href="https://www.actaphys.uj.edu.pl/news.html">news</a></p>
+
+</div>
+
+</div> </div> </div>  <div class="container"> <div class="row" id="footer-row"> <div class="col-s-6" id="ISSN"> <p class="color-R"><strong>PL ISSN 0587-4254</strong> <span>&bull; <a href="https://www.actaphys.uj.edu.pl/subscriptions.html" class="color-R" rel="nofollow">APPB</a> printed version</span></p> <p class="color-R"><strong>PL ISSN 1509-5770</strong> <span>&bull; <a href="https://www.actaphys.uj.edu.pl/R" class="color-R" rel="nofollow">APPB</a> electronic version</span></p> <p class="color-S"><strong>PL ISSN 1899-2358</strong> <span>&bull; <a href="https://www.actaphys.uj.edu.pl/subscriptions.html" class="color-S" rel="nofollow">APPB</a> Proc. Suppl. printed version</span></p> <p class="color-S"><strong>PL ISSN 2082-7865</strong> <span>&bull; <a href="https://www.actaphys.uj.edu.pl/S" class="color-S" rel="nofollow">APPB</a> Proc.&nbsp;Suppl.&nbsp;electronic&nbsp;version</span></p> </div> <div class="col-s-6"> <p><span class="color-R"><strong>Acta Physica Polonica B</strong></span></p> <p>Faculty of Physics, Astronomy and Applied&nbsp;Computer&nbsp;Science</p> <p>S. &Lstrok;ojasiewicza 11, 30-348 Krak&oacute;w, Poland</p> <p>phone: <span class="color-R">(+48) 12 664 49 68 &bull; (+48) 12 664 46 46</span></p> <p>e-mail: <span class="e-mail">&#097;&#099;&#116;&#097;&#046;&#112;&#104;&#121;&#115;&#046;&#112;&#111;&#108;&#046;&#098;&#064;&#117;&#106;&#046;&#101;&#100;&#117;&#046;&#112;&#108;</span></p> </div> </div> <p style="font-size:12px;">ver. 2024.07.14 &bull; we use <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" aria-label="cookies explained" rel="noreferrer">cookies</a> and <a href="https://www.mathjax.org" target="_blank" aria-label="MathJax" rel="noreferrer">MathJax</a></p> </div> <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script> <script type="text/x-mathjax-config"> //--- allow '$' as in-line math delimiters // MathJax.Hub.Config({ // tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]} // }); //--- turn on automatic line-breaking MathJax.Hub.Config({ CommonHTML: { linebreaks: { automatic: true } }, "HTML-CSS": { linebreaks: { automatic: true } }, SVG: { linebreaks: { automatic: true } } }); // --- APPB macros MathJax.Hub.Config({ TeX: { Macros: { nicefrac: ["{^{#1\\!}/_{#2}}",2] } } }); //--- output mode choice MathJax.Hub.Register.StartupHook("End Jax",function () { var BROWSER = MathJax.Hub.Browser; var jax = "HTML-CSS"; if (BROWSER.isMSIE && BROWSER.hasMathPlayer) jax = "NativeMML"; //if (BROWSER.isFirefox) jax = "SVG"; //if (BROWSER.isFirefox) jax = "NativeMML"; if (BROWSER.isSafari && BROWSER.versionAtLeast("5.0")) jax = "NativeMML"; return MathJax.Hub.setRenderer(jax); }); </script>
+
+<!--script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script-->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+ </body> </html>
+
+
+
+
