@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
-import ollama
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 
 # Configure the MySQL connection
-# Replace 'admin123', 'abc123', and 'university_expert_system' with your MySQL credentials and database name.
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin123:abc123@localhost/university_expert_system'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -16,19 +15,34 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Define a User model to represent users in the database
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # Auto-incrementing primary key
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=True)
 
-    def __init__(self, username, password, email=None):
+    def __init__(self, username, hashed_password, email=None):
         self.username = username
-        self.password = password  # In production, store hashed passwords!
+        self.password = hashed_password
         self.email = email
 
-# User loader callback for Flask-Login
+# NEW: a table for storing chat records: user message, assistant response, references
+class ChatRecord(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_message = db.Column(db.Text, nullable=False)
+    assistant_response = db.Column(db.Text, nullable=False)
+    reference_docs = db.Column(db.Text, nullable=True)  # can store JSON or a plain string
+
+    # relationship back to the user
+    user = db.relationship('User', backref=db.backref('chat_records', lazy=True))
+
+    def __init__(self, user_id, user_message, assistant_response, reference_docs=None):
+        self.user_id = user_id
+        self.user_message = user_message
+        self.assistant_response = assistant_response
+        self.reference_docs = reference_docs
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -42,22 +56,13 @@ def login():
     
     # Fetch the user from the database
     user = User.query.filter_by(username=username).first()
-    # In production, compare hashed passwords
-    if user and user.password == password:
-        login_user(user)
-        return jsonify({"message": "Login successful"}), 200
-    return jsonify({"message": "Invalid credentials"}), 401
+    if user:
+        # Compare hashed password with the provided password
+        if check_password_hash(user.password, password):
+            login_user(user)
+            return jsonify({"message": "Login successful"}), 200
 
-# Endpoint for RAG query (requires login)
-@app.route("/rag", methods=["POST"])
-@login_required
-def rag_query():
-    data = request.json
-    query = data.get("query")
-    
-    # Generate response using Ollama (modify for LangChain if needed)
-    response = ollama.generate(model="mistral", prompt=query)
-    return jsonify({"answer": response["response"]})
+    return jsonify({"message": "Invalid credentials"}), 401
 
 # Endpoint for user signup
 @app.route("/signup", methods=["POST"])
@@ -75,8 +80,11 @@ def signup():
     if User.query.filter_by(username=username).first():
         return jsonify({"message": "User already exists."}), 409
     
-    # Create and save the new user (remember to hash the password in production!)
-    new_user = User(username, password, email)
+    # Hash the password before storing
+    hashed_pw = generate_password_hash(password)
+    
+    # Create and save the new user (now storing hashed password!)
+    new_user = User(username, hashed_pw, email)
     db.session.add(new_user)
     db.session.commit()
     
@@ -86,12 +94,10 @@ def signup():
 @app.route("/profile", methods=["GET"])
 @login_required
 def profile():
-    # Get the username from the query parameters
     username = request.args.get("username")
     if not username:
         return jsonify({"message": "Username is required."}), 400
 
-    # Query the user from the database
     user = User.query.filter_by(username=username).first()
     if not user:
         return jsonify({"message": "User not found."}), 404
@@ -109,34 +115,98 @@ def logout():
     logout_user()
     return jsonify({"message": "Logged out"}), 200
 
-if __name__ == "__main__":
-    # Manually push the app context and create tables (replacing the deprecated before_first_request decorator)
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
-
-@app.route("/update_profile", methods=["PUT"])
+# Endpoint to update password
+@app.route("/update_password", methods=["PUT"])
 @login_required
-def update_profile():
+def update_password():
+    """
+    Expects JSON:
+    {
+      "username": "theUser",
+      "old_password": "oldPlainTextPassword",
+      "new_password": "newPlainTextPassword"
+    }
+    """
     data = request.json
     username = data.get("username")
-    new_email = data.get("email")
-    new_password = data.get("password")  # optional if user wants to change password
+    old_password = data.get("old_password")
+    new_password = data.get("new_password")
 
-    if not username:
-        return jsonify({"message": "Username is required."}), 400
+    if not username or not old_password or not new_password:
+        return jsonify({"message": "All fields (username, old_password, new_password) are required."}), 400
 
+    # Query the user by username
     user = User.query.filter_by(username=username).first()
     if not user:
         return jsonify({"message": "User not found."}), 404
 
-    # Update fields as present
-    if new_email is not None:
-        user.email = new_email
-    if new_password is not None and new_password.strip():
-        user.password = new_password  # In production, store a hash!
+    # Verify the old password
+    if not check_password_hash(user.password, old_password):
+        return jsonify({"message": "Old password is incorrect."}), 401
+
+    # Hash the new password
+    hashed_pw = generate_password_hash(new_password)
+    user.password = hashed_pw
 
     db.session.commit()
+    return jsonify({"message": "Password updated successfully."}), 200
 
-    return jsonify({"message": "Profile updated successfully"}), 200
+@app.route("/store_chat_record", methods=["POST"])
+@login_required
+def store_chat_record():
+    """
+    Expects JSON:
+    {
+      "username": "someUser",
+      "user_message": "Hello, can you help me?",
+      "assistant_response": "Sure, how can I help?",
+      "reference_docs": "[{'source':'doc1.pdf','snippet':'...'}]"
+    }
+    """
+    data = request.json
+    username = data.get("username")
+    user_message = data.get("user_message")
+    assistant_response = data.get("assistant_response")
+    reference_docs = data.get("reference_docs")
 
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    # Insert a new record
+    record = ChatRecord(
+        user_id=user.id,
+        user_message=user_message,
+        assistant_response=assistant_response,
+        reference_docs=reference_docs
+    )
+    db.session.add(record)
+    db.session.commit()
+
+    return jsonify({"message": "Chat record stored successfully"}), 201
+
+@app.route("/get_chat_records", methods=["GET"])
+@login_required
+def get_chat_records():
+    username = request.args.get("username")
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    records = ChatRecord.query.filter_by(user_id=user.id).all()
+    results = []
+    for r in records:
+        results.append({
+            "id": r.id,
+            "user_message": r.user_message,
+            "assistant_response": r.assistant_response,
+            "reference_docs": r.reference_docs
+        })
+    return jsonify(results), 200
+
+
+if __name__ == "__main__":
+    # Manually push the app context and create tables
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)

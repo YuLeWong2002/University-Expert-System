@@ -51,7 +51,6 @@ class StreamingOllamaCLI(LLM):
         if stderr:
             print("stderr:", stderr)
 
-
 # ---------------- Document & Vector Store Building ----------------
 def load_documents(folder_path):
     docs = []
@@ -172,23 +171,18 @@ def build_or_load_vector_store(folder_path, pdf_path, faiss_dir="faiss_index"):
 
     return vector_store
 
-
 def build_chat_prompt_with_context(messages, query, retriever, top_k=3):
-    # 1. Get relevant docs from vector store
     docs = retriever.get_relevant_documents(query)[:top_k]
     context_texts = "\n\n".join([doc.page_content for doc in docs])
 
-    # 2. Build chat history string
+    # Build the conversation
     chat_history = ""
     for msg in messages:
-        role = msg["role"]
-        content = msg["content"]
-        if role == "user":
-            chat_history += f"User: {content}\n"
-        elif role == "assistant":
-            chat_history += f"Assistant: {content}\n"
+        if msg["role"] == "user":
+            chat_history += f"User: {msg['content']}\n"
+        else:
+            chat_history += f"Assistant: {msg['content']}\n"
 
-    # 3. Final prompt with memory + retrieved context
     final_prompt = f"""You are a helpful assistant. Use the following context to answer the user query.
 
 Context:
@@ -198,8 +192,54 @@ Conversation history:
 {chat_history}
 User: {query}
 Assistant:"""
-
     return final_prompt
+
+# ---------------- Resource / DB Helpers ----------------
+def fetch_chat_history_from_db():
+    """Fetch all chat records for the current user from the server DB."""
+    resp = st.session_state.session.get(
+        f"{BASE_URL}/get_chat_records",
+        params={"username": st.session_state.username}
+    )
+    print("Successfully fetch chat history from database")
+    if resp.status_code == 200:
+        chat_data = resp.json()  # list of {user_message, assistant_response, reference_docs}
+        messages = []
+        for record in chat_data:
+            # Parse references from JSON
+            refs = []
+            if record["reference_docs"]:
+                try:
+                    refs = json.loads(record["reference_docs"])
+                except:
+                    refs = []
+            # user turn
+            messages.append({"role": "user", "content": record["user_message"]})
+            # assistant turn
+            messages.append({
+                "role": "assistant",
+                "content": record["assistant_response"],
+                "refs": refs
+            })
+        return messages
+    else:
+        st.error("Failed to load chat history: " + resp.text)
+        return []
+    
+def store_chat_record_in_db(user_input, assistant_answer, reference_docs=None):
+    """Store the user->assistant turn in DB via /store_chat_record."""
+    payload = {
+        "username": st.session_state.username,
+        "user_message": user_input,
+        "assistant_response": assistant_answer,
+        "reference_docs": reference_docs
+    }
+    resp = st.session_state.session.post(
+        f"{BASE_URL}/store_chat_record",
+        json=payload
+    )
+    if resp.status_code != 201:
+        st.error("Failed to store chat record: " + resp.text)
 
 # ---------------- The chatbot() function ----------------
 def chatbot():
@@ -207,90 +247,107 @@ def chatbot():
         st.error("Please log in first.")
         st.session_state.page = "Login"
         st.rerun()
+    # log debug message
+    print(st.session_state.logged_in)
+    print(st.session_state.username)
 
-    col1, col2 = st.columns([4,2])
+    col1, col2 = st.columns([4, 2])
     with col1:
-        # Use a smaller heading so it doesn't add huge vertical spacing
         st.markdown("## Chatbot")
-
     with col2:
-        # Add a blank line or two to push the button down to match the heading
         st.write("")
-        # Now place the button
         if st.button("Profile"):
             switch_page("Profile")
 
-
-    # 1) Build vector store once
-    # if "vector_store" not in st.session_state:
-    #     folder_path = "f13_json"
-    #     pdf_path = "pdf"
-    #     st.session_state.vector_store = build_or_load_vector_store(folder_path, pdf_path)
-
-    # # 2) Initialize streaming LLM once
-    # if "llm" not in st.session_state:
-    #     st.session_state.llm = StreamingOllamaCLI(model="deepseek-r1:7b")
-
-    # 3) Initialize chat history if not present
+    # 1) Load from DB if no local messages
     if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {"role": "assistant", "content": "Hello! How can I help you with the RAG system?"}
-        ]
+        print("DEBUG: messages is not in session_state, fetching from DB")
+        loaded_history = fetch_chat_history_from_db()
+        if loaded_history:
+            st.session_state.messages = loaded_history
+        else:
+            print("DEBUG: messages is ALREADY in session_state, skipping fetch")
+            # No existing DB history => start with a greeting
+            st.session_state.messages = [
+                {"role": "assistant", "content": "Hello! How can I help you with the RAG system?"}
+            ]
 
-    # 4) Display existing chat history
+    # 2) Display the conversation
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
+            # If assistant references exist, expand them
+            if msg["role"] == "assistant" and msg.get("refs"):
+                with st.expander("Referenced Documents"):
+                    for ref_item in msg["refs"]:
+                        source = ref_item.get("source", "Unknown source")
+                        snippet = ref_item.get("snippet", "")
+                        page = ref_item.get("page", None)
+                        if page is not None:
+                            st.write(f"**Source**: {source} | **Page**: {page} | Snippet: {snippet}...")
+                        else:
+                            st.write(f"**Source**: {source} | Snippet: {snippet}...")
 
-    # 5) Chat input
+    # 3) Chat input
     if user_input := st.chat_input("Type your message..."):
-        # Add user message to session history
+        # Add user turn
         st.session_state.messages.append({"role": "user", "content": user_input})
         with st.chat_message("user"):
             st.markdown(user_input)
 
-        # ----- 1) Retrieve documents and build prompt manually -----
+        # Create final prompt & retrieve docs
         vector_store = st.session_state.vector_store
         retriever = vector_store.as_retriever(search_kwargs={"k": 3})
         final_prompt = build_chat_prompt_with_context(
-            messages=st.session_state.messages[:-1],  # exclude current user msg to avoid duplication
+            messages=st.session_state.messages[:-1],
             query=user_input,
             retriever=retriever
         )
 
-        # ----- 2) Stream the LLM’s response in real time -----
+        # 4) Generate assistant response
         with st.chat_message("assistant"):
-            partial_placeholder = st.empty()   # a placeholder for partial tokens
-            partial_text = ""                  # accumulates partial output
-
+            partial_placeholder = st.empty()
+            partial_text = ""
             try:
-                # We'll call the new generator method we added
                 for token in st.session_state.llm.generate_stream(final_prompt):
                     partial_text += token
                     partial_placeholder.markdown(partial_text)
-                
                 final_answer = partial_text.strip()
             except Exception as e:
                 final_answer = f"Error generating answer: {e}"
                 partial_placeholder.markdown(final_answer)
 
-        # ----- 3) Save the final answer in session state -----
+        # Save assistant turn locally
         st.session_state.messages.append({"role": "assistant", "content": final_answer})
 
-        # ----- 4) Show references (just like before) -----
+        # Gather references
+        source_docs = retriever.get_relevant_documents(user_input)
+        ref_list = []
         with st.expander("Referenced Documents"):
-            source_docs = retriever.get_relevant_documents(user_input)
             for doc in source_docs:
                 source = doc.metadata.get("source", "Unknown source")
                 snippet = doc.page_content[:200]
                 pdf_page = doc.metadata.get("pdf_page", None)
+                snippet_info = {
+                    "source": source,
+                    "snippet": snippet,
+                    "page": pdf_page
+                }
+                ref_list.append(snippet_info)
+
                 if pdf_page is not None:
                     st.write(f"**Source**: {source} | **Page**: {pdf_page} | Snippet: {snippet}...")
                 else:
                     st.write(f"**Source**: {source} | Snippet: {snippet}...")
-
                 page_url = doc.metadata.get("url", "")
                 if page_url:
                     st.write(f"**Page**: {page_url}")
                     st.markdown(f"[Visit page]({page_url})")
 
+        # 5) Store new turn in DB
+        reference_docs_json = json.dumps(ref_list)
+        store_chat_record_in_db(
+            user_input,
+            final_answer,
+            reference_docs_json
+        )

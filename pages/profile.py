@@ -26,11 +26,14 @@ def profile():
         st.text_input("Username", value=username_val, disabled=True)
         st.text_input("Email", value=email_val, disabled=True)
 
-        col1, col2 = st.columns(2)
+        # Use columns for logout/back, and then a third form button for password
+        col1, col2, col3 = st.columns([1, 1, 1])
         with col1:
             logout_btn = st.form_submit_button("Logout")
         with col2:
             back_btn = st.form_submit_button("Back to Chatbot")
+        with col3:
+            change_pw_btn = st.form_submit_button("Change Password")
 
         if logout_btn:
             try:
@@ -38,10 +41,10 @@ def profile():
                 if response.status_code == 200:
                     st.success("Logged out successfully!")
                     st.session_state.logged_in = False
-                    st.session_state.username = ""
-
-                    # Switch page to Login
+                    st.session_state.username = ""      # clear the old user
+                    st.session_state.messages = []      # clear any conversation in memory
                     st.session_state.page = "Login"
+                    print(st.session_state.logged_in)   # log debug message
                     st.rerun()
                 else:
                     st.error("Logout failed.")
@@ -50,4 +53,8 @@ def profile():
 
         if back_btn:
             st.session_state.page = "Chatbot"
+            st.rerun()
+
+        if change_pw_btn:
+            st.session_state.page = "ChangePassword"
             st.rerun()
