@@ -204,6 +204,21 @@ def get_chat_records():
         })
     return jsonify(results), 200
 
+@app.route("/clear_chat_records", methods=["DELETE"])
+@login_required
+def clear_chat_records():
+    """
+    Delete *all* chat turns that belong to the given user.
+    ?username=bob is passed as a query‑param from the frontend.
+    """
+    username = request.args.get("username")
+    user     = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    ChatRecord.query.filter_by(user_id=user.id).delete()
+    db.session.commit()
+    return jsonify({"message": "Chat history cleared"}), 200
 
 if __name__ == "__main__":
     # Manually push the app context and create tables

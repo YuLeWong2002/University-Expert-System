@@ -8,6 +8,11 @@ from pages.profile import profile
 from pages.change_password import change_password
 from pages.chatbot import StreamingOllamaCLI, build_or_load_vector_store
 
+st.set_page_config(
+    page_title="Nottingham Chatbot",
+    page_icon="🤖",
+)
+
 def set_page(page_name: str):
     """Helper to change pages inside this session."""
     st.session_state.page = page_name
@@ -24,8 +29,8 @@ if "session" not in st.session_state:
 # 2) Immediately load the heavy resources if not in session yet
 if "vector_store" not in st.session_state:
     folder_path = "f13_json"
-    pdf_path = "pdf"
-    st.session_state.vector_store = build_or_load_vector_store(folder_path, pdf_path)
+    pdf_jsonl   ="pdf_chunks.jsonl"
+    st.session_state.vector_store = build_or_load_vector_store(folder_path, pdf_jsonl)
 
 if "llm" not in st.session_state:
     time.sleep(3)  # simulate heavy load

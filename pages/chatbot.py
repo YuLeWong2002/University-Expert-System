@@ -8,12 +8,16 @@ from pydantic import Field
 from langchain.docstore.document import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
+from langchain_community.retrievers import BM25Retriever
 from langchain.llms.base import LLM
 from langchain.text_splitter import CharacterTextSplitter
+from sentence_transformers import CrossEncoder
+from typing import List, Tuple, Optional
+from symspellpy import SymSpell, Verbosity
+from tavily_config import TavilyClient
 from utils import switch_page
 from config import BASE_URL
-import PyPDF2
+import re
 
 # ---------------- STREAMING Ollama CLI-based LLM ----------------
 class StreamingOllamaCLI(LLM):
@@ -89,43 +93,7 @@ def load_documents(folder_path):
                 docs.append(doc)
     return docs
 
-def load_pdfs(folder_path: str) -> list[Document]:
-    """
-    Loads all PDF files in the given folder, extracting text from each page,
-    and returning them as a list of Document objects.
-    """
-    docs = []
-    for filename in os.listdir(folder_path):
-        if filename.lower().endswith(".pdf"):
-            file_path = os.path.join(folder_path, filename)
-            try:
-                with open(file_path, "rb") as f:
-                    pdf_reader = PyPDF2.PdfReader(f)
 
-                    # Iterate through all the pages
-                    for page_idx in range(len(pdf_reader.pages)):
-                        page = pdf_reader.pages[page_idx]
-                        page_text = page.extract_text()
-
-                        # Skip empty text
-                        if not page_text or not page_text.strip():
-                            continue
-
-                        # Create a Document with metadata
-                        doc = Document(
-                            page_content=page_text,
-                            metadata={
-                                "source": filename,
-                                "pdf_page": page_idx + 1,  # 1-based index
-                                # You can include more metadata as needed
-                                "file_path": file_path
-                            }
-                        )
-                        docs.append(doc)
-
-            except Exception as e:
-                print(f"Error reading {file_path}: {e}")
-    return docs
 
 def split_document_into_chunks(doc, chunk_size=1000, chunk_overlap=50):
     splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -138,40 +106,125 @@ def split_document_into_chunks(doc, chunk_size=1000, chunk_overlap=50):
         for i, chunk in enumerate(chunks)
     ]
 
-def build_or_load_vector_store(folder_path, pdf_path, faiss_dir="faiss_index"):
-    import os
+# Read pre‑chunked PDF text from a JSONL file
+def load_jsonl_chunks(jsonl_path: str) -> list[Document]:
+    """
+    Each line in jsonl must contain:
+    {
+      "id": "...",
+      "source": "...pdf",
+      "page": 3,
+      "chunk_index": 17,
+      "text": "clean chunk text..."
+    }
+    """
+    docs = []
+    with open(jsonl_path, encoding="utf-8") as fh:
+        for line in fh:
+            obj = json.loads(line)
+            docs.append(
+                Document(
+                    page_content=obj["text"],
+                    metadata={
+                        "source": obj["source"],
+                        "pdf_page": obj.get("page"),
+                        "chunk_index": obj.get("chunk_index"),
+                        # keep url key for UI consistency (may be empty)
+                        "url": obj.get("url", "")
+                    }
+                )
+            )
+    return docs
+
+def build_or_load_vector_store(
+        json_folder: str,
+        pdf_jsonl: str,
+        faiss_dir="faiss_index"
+):
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    st.session_state.embeddings = embeddings
 
     if os.path.isdir(faiss_dir):
         print("Loading FAISS index from disk...")
-        # Add the keyword argument allow_dangerous_deserialization=True
-        vector_store = FAISS.load_local(
+        dense_store = FAISS.load_local(
             faiss_dir,
             embeddings,
             allow_dangerous_deserialization=True
         )
     else:
         print("Building FAISS index from scratch...")
-        # (A) Load JSON + PDF documents
-        json_docs = load_documents(folder_path)
-        pdf_docs = load_pdfs(pdf_path)
+        json_docs = load_documents(json_folder)
+        pdf_docs = load_jsonl_chunks(pdf_jsonl)
         all_docs = json_docs + pdf_docs
 
-        # (B) Chunk them
         chunked_docs = []
         for d in all_docs:
-            chunked_docs.extend(split_document_into_chunks(d))
+            if "chunk_index" in d.metadata:
+                chunked_docs.append(d)
+            else:
+                chunked_docs.extend(split_document_into_chunks(d))
 
-        # (C) Create new FAISS vector store
-        vector_store = FAISS.from_documents(chunked_docs, embeddings)
-
-        # (D) Save to disk
-        vector_store.save_local(faiss_dir)
+        dense_store = FAISS.from_documents(chunked_docs, embeddings)
+        dense_store.save_local(faiss_dir)
         print(f"FAISS index saved to {faiss_dir}/")
 
-    return vector_store
+    # --- BM25Retriever: build from same documents used in FAISS ---
+    all_docs = list(dense_store.docstore._dict.values())
+    sparse_retriever = BM25Retriever.from_documents(all_docs)
+    sparse_retriever.k = 5  # Top-K sparse docs
 
-def build_chat_prompt_with_context(messages, query, retriever, top_k=3):
+    # Store both retrievers in session state
+    st.session_state.vector_store = dense_store  # for backward compatibility
+    st.session_state.dense_store = dense_store
+    st.session_state.sparse_retriever = sparse_retriever
+
+    return dense_store  # still return for legacy calls
+
+def hybrid_retrieve(query: str, k_dense=5, k_sparse=5, top_k_final=5):
+    dense_store = st.session_state.dense_store
+    sparse_retriever = st.session_state.sparse_retriever
+
+    # Dense results
+    dense_results = dense_store.similarity_search_with_score(query, k=k_dense)
+    dense_docs = [(doc, score, "dense") for doc, score in dense_results]
+
+    # Sparse results (BM25Retriever returns Documents, not scores)
+    sparse_docs = [(doc, None, "sparse") for doc in sparse_retriever.get_relevant_documents(query)]
+
+    # Combine and deduplicate (based on source + chunk_index)
+    seen = set()
+    merged = []
+
+    for doc, score, source in dense_docs + sparse_docs:
+        doc_id = (doc.metadata.get("source"), doc.metadata.get("chunk_index"))
+        if doc_id not in seen:
+            merged.append((doc, score, source))
+            seen.add(doc_id)
+
+    # Sort by dense score if available
+    merged_sorted = sorted(merged, key=lambda x: x[1] if x[1] is not None else float('inf'))
+
+    return merged_sorted[:top_k_final]
+
+# Load once globally (e.g., at the top of your script)
+reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+def rerank_documents(query: str, docs: List[Tuple[Document, Optional[float], str]], top_k=5):
+    """
+    Reranks documents using a CrossEncoder based on query relevance.
+    Input: List of (Document, score, source)
+    Output: List of (Document, rerank_score, source)
+    """
+    pairs = [(query, doc.page_content) for doc, _, _ in docs]
+    scores = reranker.predict(pairs)
+    reranked = sorted(
+        zip([doc for doc, _, src in docs], scores, [src for _, _, src in docs]),
+        key=lambda x: x[1],
+        reverse=True
+    )
+    return reranked[:top_k]
+
+def build_chat_prompt_with_context(messages, query, retriever, top_k=5):
     docs = retriever.get_relevant_documents(query)[:top_k]
     context_texts = "\n\n".join([doc.page_content for doc in docs])
 
@@ -194,7 +247,7 @@ User: {query}
 Assistant:"""
     return final_prompt
 
-# ---------------- Resource / DB Helpers ----------------
+# Resource / DB Helpers
 def fetch_chat_history_from_db():
     """Fetch all chat records for the current user from the server DB."""
     resp = st.session_state.session.get(
@@ -241,113 +294,362 @@ def store_chat_record_in_db(user_input, assistant_answer, reference_docs=None):
     if resp.status_code != 201:
         st.error("Failed to store chat record: " + resp.text)
 
+sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
+dictionary_path = "frequency_dictionary_en_82_765.txt"  # Adjust if needed
+if not sym_spell.load_dictionary(dictionary_path, term_index=0, count_index=1):
+    print("Dictionary file not found!")
+
+def correct_query(query: str) -> str:
+    """
+    Use SymSpell to correct spelling in the user query.
+    Returns corrected text if any corrections are found,
+    otherwise returns original query.
+    """
+    suggestions = sym_spell.lookup_compound(query, max_edit_distance=2)
+    if suggestions:
+        corrected = suggestions[0].term
+        # Optional: Print corrections for debugging
+        if corrected.lower() != query.lower():
+            print(f"Corrected query: '{query}' -> '{corrected}'")
+        return corrected
+    return query
+
+# Synonym table & query‑expander 
+SYNONYM_MAP = {
+    # academics
+    "exchange programme": ["study abroad", "mobility program", "student exchange", "international study"],
+    "assessment"        : ["exam", "test", "evaluation"],
+    "lecture"           : ["class session", "teaching session"],
+    "module"            : ["course", "subject"],
+
+    # campus life
+    "alcohol"           : ["liquor", "drink", "beer", "wine", "alcoholic beverages"],
+    "accommodation"     : ["housing", "dormitory", "residence hall"],
+    "canteen"           : ["cafeteria", "food court", "dining hall"],
+    "library"           : ["learning resource centre"],
+
+    # admin / travel
+    "visa"              : ["student pass", "immigration clearance", "entry permit"],
+    "registration"      : ["enrolment", "enrollment"],
+    "scholarship"       : ["bursary", "financial aid"]
+}
+
+def expand_query_with_synonyms(query: str) -> list[str]:
+    """Return [original, synonym‑substituted…] – all lower‑cased."""
+    expanded = {query.lower()}
+    for key, syns in SYNONYM_MAP.items():
+        pattern = r"\b" + re.escape(key) + r"\b"
+        if re.search(pattern, query, flags=re.I):
+            for s in syns:
+                expanded.add(re.sub(pattern, s, query, flags=re.I))
+    return list(expanded)
+
+def expanded_similarity_search(vdb: FAISS, query: str, k_per=3) -> list[tuple[Document,float]]:
+    """
+    Run similarity_search_with_score on the original + synonym variants,
+    merge by keeping the best (lowest) distance per document.
+    Returns a list sorted by distance.
+    """
+    variants = expand_query_with_synonyms(query)
+    best: dict[str, tuple[Document,float]] = {}
+
+    for q in variants:
+        for doc, score in vdb.similarity_search_with_score(q, k=k_per):
+            doc_id = f"{doc.metadata.get('source')}|{doc.metadata.get('chunk_index')}"
+            if doc_id not in best or score < best[doc_id][1]:
+                best[doc_id] = (doc, score)
+
+    # sort by score (lower = closer) and return
+    return sorted(best.values(), key=lambda pair: pair[1])
+
+tavily_client = TavilyClient(api_key="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")
+
+def fetch_tavily_summary(query: str) -> str:
+    try:
+        # 'search_depth' can be "basic", "medium", or "advanced"
+        result = tavily_client.search(
+            query=query,
+            search_depth="basic",
+            include_answer=True
+        )
+        print("\n=== Tavily Search Result ===")
+        ai_answer = result.get("answer", "No AI-generated answer available.")
+        print(f"AI-Generated Answer:\n{ai_answer}")
+
+        links = result.get("links", [])
+        print("\nLinks:")
+        for i, link in enumerate(links):
+            print(f"{i+1}. URL: {link['url']}")
+            print(f"   Title: {link['title']}")
+            print(f"   Snippet: {link['snippet']}\n")
+
+        # Return the AI answer or something for the fallback
+        return ai_answer
+
+    except Exception as e:
+        # Return a string describing the error
+        err_msg = f"Error using Tavily: {e}"
+        print(err_msg)
+        return err_msg
+    
+
+# Embed a text string once
+
+def embed(text: str):
+    emb = st.session_state.embeddings                 # <-- get the shared object
+    return st.session_state._embed_cache.setdefault(
+        text,
+        emb.embed_query(text)
+    )
+
+# lazy init of a per‑session cache
+if "_embed_cache" not in st.session_state:
+    st.session_state._embed_cache = {}
+
+# Pick relevant turns from history
+def build_relevant_chat_history(query: str,
+                                messages: list[dict],
+                                max_pairs: int = 6,
+                                sim_thresh: float = 0.7) -> str:
+    """
+    Return a chat‑history string containing at most `max_pairs`
+    user/assistant turns that are semantically similar to `query`.
+    """
+    query_vec = embed(query)
+    scored = []
+
+    # walk messages in reverse (newest first) and score
+    for m in reversed(messages):
+        if m["role"] not in ("user", "assistant"):
+            continue
+        vec   = embed(m["content"])
+        # cosine similarity for unit‑norm vectors = dot product
+        sim   = sum(q * v for q, v in zip(query_vec, vec))
+        scored.append((sim, m))
+
+    # keep top N turns above threshold
+    picked = [m for sim, m in sorted(scored, reverse=True) if sim > sim_thresh][:max_pairs]
+
+    # restore chronological order
+    picked = list(reversed(picked))
+
+    # build the text block
+    chat_hist = ""
+    for m in picked:
+        role = "User" if m["role"] == "user" else "Assistant"
+        chat_hist += f"{role}: {m['content']}\n"
+    return chat_hist
+
+
 # ---------------- The chatbot() function ----------------
 def chatbot():
+    # ---------- 0. Guard: user must be logged in ----------
     if not st.session_state.logged_in:
         st.error("Please log in first.")
         st.session_state.page = "Login"
         st.rerun()
-    # log debug message
-    print(st.session_state.logged_in)
-    print(st.session_state.username)
 
-    col1, col2 = st.columns([4, 2])
-    with col1:
-        st.markdown("## Chatbot")
-    with col2:
-        st.write("")
+    print("Logged in:", st.session_state.logged_in, "as", st.session_state.username)
+
+    # ---------- header bar --------------------------------------------------
+    col_title, col_profile, col_clear = st.columns([6, 1.2, 1.8])
+
+    with col_title:
+        st.markdown("## Chatbot")          # title keeps its native spacing
+
+    # amount of padding that centres buttons (~ 0.85 em works for the default theme)
+    PAD = "<div style='padding-top:0.85em'></div>"
+
+    with col_profile:
+        st.markdown(PAD, unsafe_allow_html=True)      # <‑‑ add vertical offset
         if st.button("Profile"):
             switch_page("Profile")
 
-    # 1) Load from DB if no local messages
+    with col_clear:
+        st.markdown(PAD, unsafe_allow_html=True)      # <‑‑ same offset
+        if st.button("Clear Chat", key="clr"):
+            resp = st.session_state.session.delete(
+                f"{BASE_URL}/clear_chat_records",
+                params={"username": st.session_state.username},
+            )
+            if resp.status_code == 200:
+                st.session_state.messages = [{
+                    "role": "assistant",
+                    "content": "Your chat history has been cleared."
+                }]
+                st.success("Chat history cleared.")
+                st.rerun()
+            else:
+                st.error("Failed to clear history: " + resp.text)
+
+    # ---------- 2. Load conversation from DB (if empty) ----------
     if "messages" not in st.session_state:
-        print("DEBUG: messages is not in session_state, fetching from DB")
         loaded_history = fetch_chat_history_from_db()
         if loaded_history:
             st.session_state.messages = loaded_history
         else:
-            print("DEBUG: messages is ALREADY in session_state, skipping fetch")
-            # No existing DB history => start with a greeting
             st.session_state.messages = [
                 {"role": "assistant", "content": "Hello! How can I help you with the RAG system?"}
             ]
 
-    # 2) Display the conversation
+    # ---------- 3. Render existing conversation ----------
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
-            # If assistant references exist, expand them
             if msg["role"] == "assistant" and msg.get("refs"):
                 with st.expander("Referenced Documents"):
-                    for ref_item in msg["refs"]:
-                        source = ref_item.get("source", "Unknown source")
-                        snippet = ref_item.get("snippet", "")
-                        page = ref_item.get("page", None)
+                    for ref in msg["refs"]:
+                        src   = ref.get("source", "Unknown source")
+                        snip  = ref.get("snippet", "")
+                        page  = ref.get("page", None)
+                        url   = ref.get("url", "")
                         if page is not None:
-                            st.write(f"**Source**: {source} | **Page**: {page} | Snippet: {snippet}...")
+                            st.write(f"**Source**: {src} | **Page**: {page} | Snippet: {snip}...")
                         else:
-                            st.write(f"**Source**: {source} | Snippet: {snippet}...")
+                            st.write(f"**Source**: {src} | Snippet: {snip}...")
+                        if url:
+                            st.markdown(f"[Visit page]({url})")
 
-    # 3) Chat input
+    # ---------- 4. Handle new user input ----------
     if user_input := st.chat_input("Type your message..."):
-        # Add user turn
+        # 4‑A. Show user message
         st.session_state.messages.append({"role": "user", "content": user_input})
         with st.chat_message("user"):
             st.markdown(user_input)
 
-        # Create final prompt & retrieve docs
-        vector_store = st.session_state.vector_store
-        retriever = vector_store.as_retriever(search_kwargs={"k": 3})
-        final_prompt = build_chat_prompt_with_context(
-            messages=st.session_state.messages[:-1],
-            query=user_input,
-            retriever=retriever
-        )
+        # 4‑B. Spell‑correct
+        corrected_input = correct_query(user_input)
 
-        # 4) Generate assistant response
+        sparse_retriever = st.session_state.sparse_retriever
+        bm25_docs = sparse_retriever.get_relevant_documents(corrected_input)
+
+        print("\n[Top 5 BM25 (Sparse) Retrieval Results]")
+        for i, doc in enumerate(bm25_docs[:5]):
+            short_snip = doc.page_content[:120].replace("\n", " ")
+            source = doc.metadata.get("source", "?")
+            print(f"[{i+1}] Source: {source} | Snippet: {short_snip}...")
+        print("[End BM25]\n")
+
+        # ---------- 4‑C. Hybrid similarity search (BM25 + FAISS) ----------
+        retrieved_docs = hybrid_retrieve(corrected_input, k_dense=5, k_sparse=5, top_k_final=5)
+
+        print("\n[Hybrid Retrieval Results]")
+        for i, (doc, score, method) in enumerate(retrieved_docs):
+            short_snip = doc.page_content[:120].replace("\n", " ")
+            print(f"[{i+1}] {method.upper()} | Score: {score if score is not None else 'N/A'} | Source: {doc.metadata.get('source','?')} | Snippet: {short_snip}...")
+        print("[End]\n")
+
+        # ---------- 4‑D. Apply reranking ----------
+        retrieved_docs = rerank_documents(corrected_input, retrieved_docs, top_k=5)
+
+        print("\n[CrossEncoder Reranker Results]")
+        for i, (doc, score, method) in enumerate(retrieved_docs):
+            short_snip = doc.page_content[:120].replace("\n", " ")
+            print(f"[{i+1}] Score: {score:.4f} | Source: {doc.metadata.get('source','?')} | Method: {method.upper()} | Snippet: {short_snip}...")
+        print("[End Reranker Results]\n")
+
+        # ---------- 5. Filter good documents using reranker score ----------
+        RERANK_THRESH = 1.0  # Threshold: only keep passages with meaningful match
+
+        good_pairs = []
+        for doc, score, method in retrieved_docs:
+            if score >= RERANK_THRESH:
+                good_pairs.append((doc, score))
+
+        # ---------- 6. Decide: fallback or build local prompt ----------
+        if not good_pairs:
+            # ---- 6‑A. No good reranked docs → fallback to Tavily ----
+            tavily_answer = fetch_tavily_summary(corrected_input)
+            final_prompt = f"""You are a helpful AI. Use the following info to answer the user query.
+
+Tavily Web Search Summary:
+{tavily_answer}
+
+User Query: {user_input}
+
+Answer:"""
+            ref_list = [{
+                "source": "Tavily",
+                "snippet": tavily_answer[:200] if isinstance(tavily_answer, str) else "",
+                "page": None,
+                "url": ""
+            }]
+        else:
+            
+            MAX_CHUNKS = 3  # Adjust based on your model’s max token limit
+            context_text = "\n\n".join([d.page_content for d, _ in good_pairs[:MAX_CHUNKS]])
+            print("\n=== Final context sent to LLM ===")
+            print(context_text)
+            print("=== End of context ===\n")
+
+            print(f"[Using Top {min(len(good_pairs), MAX_CHUNKS)} Chunks in Final Prompt]")
+
+            # build chat history  –  keep only relevant prior turns
+            chat_hist = build_relevant_chat_history(
+                query      = user_input,
+                messages   = st.session_state.messages[:-1],   # exclude current user turn
+                max_pairs  = 1,    # <- tweak if you want more/less context
+                sim_thresh = 0.65  # <- tweak similarity cut‑off (0‑1)
+            )
+
+
+            final_prompt = f"""You are a helpful assistant. Use the following context to answer the user query.
+
+Context:
+{context_text}
+
+Conversation history:
+{chat_hist}
+User: {user_input}
+Assistant:"""
+
+            # Build reference list from good_pairs
+            ref_list = []
+            for d, s in good_pairs:
+                ref_list.append({
+                    "source" : d.metadata.get("source", "Unknown source"),
+                    "snippet": d.page_content[:200],
+                    "page"   : d.metadata.get("pdf_page", None),
+                    "url"    : d.metadata.get("url", "")
+                })
+
+        # ---------- 7. Generate assistant response ----------
         with st.chat_message("assistant"):
-            partial_placeholder = st.empty()
-            partial_text = ""
+            placeholder = st.empty()
+            acc = ""
             try:
-                for token in st.session_state.llm.generate_stream(final_prompt):
-                    partial_text += token
-                    partial_placeholder.markdown(partial_text)
-                final_answer = partial_text.strip()
+                for tok in st.session_state.llm.generate_stream(final_prompt):
+                    acc += tok
+                    placeholder.markdown(acc)
+                final_answer = acc.strip()
             except Exception as e:
                 final_answer = f"Error generating answer: {e}"
-                partial_placeholder.markdown(final_answer)
+                placeholder.markdown(final_answer)
 
-        # Save assistant turn locally
-        st.session_state.messages.append({"role": "assistant", "content": final_answer})
+        # ---------- 8. Save assistant turn ----------
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": final_answer,
+            "refs": ref_list           # store refs for future display
+        })
 
-        # Gather references
-        source_docs = retriever.get_relevant_documents(user_input)
-        ref_list = []
+        # ---------- 9. Show current references ----------
         with st.expander("Referenced Documents"):
-            for doc in source_docs:
-                source = doc.metadata.get("source", "Unknown source")
-                snippet = doc.page_content[:200]
-                pdf_page = doc.metadata.get("pdf_page", None)
-                snippet_info = {
-                    "source": source,
-                    "snippet": snippet,
-                    "page": pdf_page
-                }
-                ref_list.append(snippet_info)
-
-                if pdf_page is not None:
-                    st.write(f"**Source**: {source} | **Page**: {pdf_page} | Snippet: {snippet}...")
+            for ref in ref_list:
+                src  = ref.get("source", "Unknown source")
+                snip = ref.get("snippet", "")
+                page = ref.get("page", None)
+                url  = ref.get("url", "")
+                if page is not None:
+                    st.write(f"**Source**: {src} | **Page**: {page} | Snippet: {snip}...")
                 else:
-                    st.write(f"**Source**: {source} | Snippet: {snippet}...")
-                page_url = doc.metadata.get("url", "")
-                if page_url:
-                    st.write(f"**Page**: {page_url}")
-                    st.markdown(f"[Visit page]({page_url})")
+                    st.write(f"**Source**: {src} | Snippet: {snip}...")
+                if url:
+                    st.markdown(f"[Visit page]({url})")
 
-        # 5) Store new turn in DB
-        reference_docs_json = json.dumps(ref_list)
+        # ---------- 10. Persist to DB ----------
         store_chat_record_in_db(
             user_input,
             final_answer,
-            reference_docs_json
+            json.dumps(ref_list)
         )
