@@ -51,7 +51,7 @@ This project implements a **full-stack university chatbot system** using **Strea
 > ⚠ **Important:**  
 > Ollama must be installed and running locally.  
 > Download: [https://ollama.com/](https://ollama.com/)  
-> Example model: `deepseek-coder`
+> Example model: `deepseek-r1:7b`
 
 ---
 

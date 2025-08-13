@@ -1,0 +1,15 @@
+streamlit
+flask
+flask_sqlalchemy
+flask_login
+mysql-connector-python
+werkzeug
+requests
+pandas
+langchain
+faiss-cpu
+sentence-transformers
+symspellpy
+scikit-learn
+tqdm
+selenium
